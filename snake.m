@@ -10,7 +10,7 @@ close all;
 clear all;
 clc;
 
-PAUSE=0.1;
+speed=0.1;
 
 
 %this determines the direction of the snake UP - 1 , RIGHT - 0 , DOWN - 3 ,
@@ -66,7 +66,6 @@ snake_actual=plot(snake_body(:,1),snake_body(:,2),'gs','MarkerSize',10);
 %this function turns the snake counter clock wise
 %UP - 1 , RIGHT - 0 , DOWN - 3 ,LEFT - 2
 function turnCCW
-    
     if(snake_direction==3)
         snake_direction=0;
     else
@@ -138,9 +137,13 @@ function keyPress(src, event)
                 %turn to the left or counter clock wise
                 turnCCW;
             end
+        case 'escape'
+            running = 0;
+        case 'g'
+            growSnake(1);
+            
     end
 end
-
 
 function drawSnake()
 %sets all the x values of the snake body to the x data.
@@ -164,6 +167,19 @@ function moveSnake()
     end
     
 end
+
+%this function receives an integer parameter size which determines how many
+%snake segments are added. This function works by finding the difference
+%between the second to last body segment and the last segment, then uses
+%this difference to find the new position of the new segment. Essentially
+%this difference tells the direction of how the snake will grow.
+function growSnake(size)
+    for i=1:size
+    diff=snake_body(end-1,:)-snake_body(end,:);
+    snake_body(end+1,:)=snake_body(end,:)-diff;
+    end
+end
+        
 function setup
 %snake body stored in groups of X,Y;
 %first body part is the first column, etc.
@@ -211,11 +227,12 @@ end
 
 
 %------MAIN---------
-while 1
+while running
 
 moveSnake();
 drawSnake;
-pause(PAUSE);
+pause(speed);
 
 end
+close all
 end
