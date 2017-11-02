@@ -28,7 +28,7 @@ snake_direction = 0;
 snake_speed = 2;
 
 %creates figure, name disp
-disp=figure('Name','Snake the Game','Color','black');
+disp=figure('units','pixels','Name','Snake the Game','Color','black');
 %get screensize and set it to the Position parameter 
 SCREEN_DIMENSIONS = get(0,'Screensize');
 %running is a boolean variable that breaks the main loop if the game is running or
@@ -41,7 +41,7 @@ HEIGHT = 700;
 GRAPH_WIDTH=100;
 GRAPH_HEIGHT=100;
 %dimensions in pixels of the screen laid out.
-PLOT_DIMENSIONS = [(SCREEN_DIMENSIONS(3)-WIDTH)/2 (SCREEN_DIMENSIONS(4)-HEIGHT)/2 WIDTH HEIGHT];
+PLOT_DIMENSIONS = [SCREEN_DIMENSIONS(3)/2-WIDTH/2 SCREEN_DIMENSIONS(4)/2-HEIGHT/2 WIDTH HEIGHT];
 %set the figure into the center of screen with proper dimensions
 set(disp,'Position',PLOT_DIMENSIONS);
 %turn off Resize, toolbar, and menubar (all unnecessary).
