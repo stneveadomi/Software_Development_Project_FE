@@ -25,7 +25,7 @@ speed=0.1;
 snake_direction = 0;
 
 %this controls how much space between the snake body parts. keep at 2.
-snake_speed = 2;
+snake_speed = 1;
 
 %creates figure, name disp
 disp=figure('units','pixels','Name','Snake the Game','Color','black');
@@ -38,8 +38,8 @@ running = 1;
 WIDTH = 700;
 HEIGHT = 700;
 %width and height of the graph 0<X<100 and 0<Y<100
-GRAPH_WIDTH=100;
-GRAPH_HEIGHT=100;
+GRAPH_WIDTH=50;
+GRAPH_HEIGHT=50;
 %dimensions in pixels of the screen laid out.
 PLOT_DIMENSIONS = [SCREEN_DIMENSIONS(3)/2-WIDTH/2 SCREEN_DIMENSIONS(4)/2-HEIGHT/2 WIDTH HEIGHT];
 %set the figure into the center of screen with proper dimensions
@@ -51,14 +51,22 @@ set(disp,'MenuBar','none');
 %within the figure, anytime a key is pressed, send the data of the key
 %pressed to the KeyPress function created.
 set(disp,'KeyPressFcn',@keyPress);
+
+%https://www.mathworks.com/help/matlab/ref/matlab.graphics.primitive.text-properties.html
+title('Snake the Game','Color','white','FontName','Cambria','FontSize',20);
+
 %makes figure boxed in
 box on;
+
+
 
 %set axii to the graph width and height
 axis([0 GRAPH_WIDTH 0 GRAPH_HEIGHT]);
 axis manual;
 %remove the ticks
 set(gca,'YTick', [],'XTick',[]);
+set(gca,'XGrid', 'on','YGrid', 'on');
+set(gca,'Position',[0.1,0.1,0.8,0.8]);
 hold on
 
 %snake body stored in groups of X,Y;
