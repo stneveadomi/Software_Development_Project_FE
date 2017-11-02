@@ -6,10 +6,16 @@
 %************************************************
 
 %-------MAIN SCRIPT--------
+%Any code within this function is automatically executed on start up as
+%this function is the name of the script file.
+%this function has no parameters and is the startup for the game
+function [] = snake
+%close all windows, clear all variables, and clear console screen
 close all;
 clear all;
 clc;
 
+%this is the time between each refresh of the snake.
 speed=0.1;
 
 
@@ -66,9 +72,13 @@ snake_actual=plot(snake_body(:,1),snake_body(:,2),'gs','MarkerSize',10);
 %this function turns the snake counter clock wise
 %UP - 1 , RIGHT - 0 , DOWN - 3 ,LEFT - 2
 function turnCCW
+    %if the snake direction is 3, set to 0, as adding 1 to it would break
+    %the system. Essentially this is turning it clockwise but due to the
+    %nature of the direction system, this is necessary.
     if(snake_direction==3)
         snake_direction=0;
     else
+        %simply just add 1, changes the direction properly (1->2, up->left)
     snake_direction=snake_direction+1;
     end
 end
@@ -76,9 +86,12 @@ end
 %this function turns the snake clock wise
 %UP - 1 , RIGHT - 0 , DOWN - 3 ,LEFT - 2
 function turnCW
+    %must manually set 0 to 3 as subtracting 1 would not work.
     if(snake_direction==0)
         snake_direction=3;
     else
+    %if it is not at 0, simply subtract 1 to change dir. properly
+    %(2->1, left->up)
     snake_direction=snake_direction-1;
     end
 end
@@ -145,6 +158,7 @@ function keyPress(src, event)
     end
 end
 
+%draws the snake on the board by resetting the x data and the y data.
 function drawSnake()
 %sets all the x values of the snake body to the x data.
 set(snake_actual, 'XData',snake_body(:,1));
@@ -153,13 +167,25 @@ set(snake_actual,'YData',snake_body(:,2));
 
 end
 
+%moves the snake in the proper direction.
 function moveSnake()
-
+    %set the entire body excluding the head = to the current position of
+    %the head and body minus the last body length, essentially removing the
+    %last body segment.
     snake_body(2:end,:)=snake_body(1:end-1,:);
+    %now depending on the direction it is going, set the new head position
+    %(or first body position) in the correct direction the snake is heading
+    %eg if snake is going to the right( dir=0)
     if snake_direction==0
+    %set the head to the current head position increased by the snake_speed
+    %in the x direction (increasing the x position as it is going right)
+    %snake_speed is the distance between each segment.
     snake_body(1,:)=[snake_body(1,1)+snake_speed,snake_body(1,2)];
+    %if snake going up
     elseif snake_direction==1
+    %set the head to the snake_speed + current y, to make it move up.
     snake_body(1,:)=[snake_body(1,1),snake_body(1,2)+snake_speed];
+    %same concepts apply 
     elseif snake_direction==2
     snake_body(1,:)=[snake_body(1,1)-snake_speed,snake_body(1,2)];
     else
