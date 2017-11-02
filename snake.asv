@@ -118,7 +118,7 @@ function keyPress(src, event)
         %if the up arrow is pressed
         case 'uparrow'
             %and the snake is going to the right
-            if(snake_direction==0)
+            if(snake_direction==0&snake_body(1,:)/[2,2]
                 %turn the snake upward or counter clock wise
                 turnCCW;
             end
