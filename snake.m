@@ -200,7 +200,12 @@ end
 %this difference to find the new position of the new segment. Essentially
 %this difference tells the direction of how the snake will grow.
 function growSnake(size)
+    %for i=1 till size,
     for i=1:size
+    %find the difference between the xy value of the 2nd to last segment of
+    %the snake and the last segment of the snake. Use this difference to
+    %find the position of the new snake segment. Repeat this till the for
+    %loop finishes, essentially increase the snake body by value of size.
     diff=snake_body(end-1,:)-snake_body(end,:);
     snake_body(end+1,:)=snake_body(end,:)-diff;
     end
@@ -258,7 +263,6 @@ while running
 moveSnake();
 drawSnake;
 pause(speed);
-
 end
 close all
 end

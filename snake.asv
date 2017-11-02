@@ -74,9 +74,11 @@ snake_actual=plot(snake_body(:,1),snake_body(:,2),'gs','MarkerSize',10);
 function turnCCW
     %if the snake direction is 3, set to 0, as adding 1 to it would break
     %the system. Essentially this is turning it clockwise but due to the
+    %nature of the direction system, this is necessary.
     if(snake_direction==3)
         snake_direction=0;
     else
+        %simply just add 1, changes the direction properly (1->2, up->left)
     snake_direction=snake_direction+1;
     end
 end
@@ -84,9 +86,12 @@ end
 %this function turns the snake clock wise
 %UP - 1 , RIGHT - 0 , DOWN - 3 ,LEFT - 2
 function turnCW
+    %must manually set 0 to 3 as subtracting 1 would not work.
     if(snake_direction==0)
         snake_direction=3;
     else
+    %if it is not at 0, simply subtract 1 to change dir. properly
+    %(2->1, left->up)
     snake_direction=snake_direction-1;
     end
 end
@@ -195,7 +200,12 @@ end
 %this difference to find the new position of the new segment. Essentially
 %this difference tells the direction of how the snake will grow.
 function growSnake(size)
+    %for i=1 till size,
     for i=1:size
+    %find the difference between the xy value of the 2nd to last segment of
+    %the snake and the last segment of the snake. Use this difference to
+    %find the position of the new snake segment. Repeat this till the for
+    %loop finishes, essentially increa
     diff=snake_body(end-1,:)-snake_body(end,:);
     snake_body(end+1,:)=snake_body(end,:)-diff;
     end
@@ -253,7 +263,6 @@ while running
 moveSnake();
 drawSnake;
 pause(speed);
-
 end
 close all
 end
