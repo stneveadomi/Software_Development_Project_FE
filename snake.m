@@ -6,16 +6,12 @@
 %************************************************
 
 %-------MAIN SCRIPT--------
-
-function [] = snake()
 close all;
 clear all;
 clc;
 
 PAUSE=0.1;
-%snake body stored in groups of X,Y;
-%first body part is the first column, etc.
-snake_body = [50, 50; 48, 50; 48, 48;];
+
 
 %this determines the direction of the snake UP - 1 , RIGHT - 0 , DOWN - 3 ,
 %LEFT - 2
@@ -25,16 +21,17 @@ snake_direction = 0;
 %this controls how much space between the snake body parts. keep at 2.
 snake_speed = 2;
 
-%creates figure, name fig
-disp=figure('Name','Pong','Color','white');
+%creates figure, name disp
+disp=figure('Name','Snake the Game','Color','black');
 %get screensize and set it to the Position parameter 
 SCREEN_DIMENSIONS = get(0,'Screensize');
-
+%running is a boolean variable that breaks the main loop if the game is running or
+%not.
 running = 1;
-%width and height of window
+%width and height of window, not the actual graph.
 WIDTH = 700;
 HEIGHT = 700;
-%width and height of the graph
+%width and height of the graph 0<X<100 and 0<Y<100
 GRAPH_WIDTH=100;
 GRAPH_HEIGHT=100;
 %dimensions in pixels of the screen laid out.
@@ -57,9 +54,19 @@ axis manual;
 %remove the ticks
 set(gca,'YTick', [],'XTick',[]);
 hold on
+
+%snake body stored in groups of X,Y;
+%first body part is the first column, etc.
+snake_body = [GRAPH_WIDTH/2, GRAPH_HEIGHT/2; GRAPH_WIDTH/2-1, GRAPH_HEIGHT/2; GRAPH_WIDTH/2-2, GRAPH_HEIGHT/2;];
+
+%initial plot of the snake body, represented by snake_actual. Green squares
+%with a marker size of 10.
 snake_actual=plot(snake_body(:,1),snake_body(:,2),'gs','MarkerSize',10);
 
+%this function turns the snake counter clock wise
+%UP - 1 , RIGHT - 0 , DOWN - 3 ,LEFT - 2
 function turnCCW
+    
     if(snake_direction==3)
         snake_direction=0;
     else
@@ -67,6 +74,8 @@ function turnCCW
     end
 end
 
+%this function turns the snake clock wise
+%UP - 1 , RIGHT - 0 , DOWN - 3 ,LEFT - 2
 function turnCW
     if(snake_direction==0)
         snake_direction=3;
@@ -75,34 +84,58 @@ function turnCW
     end
 end
 
+%this function is embedded into the figure disp which holds the snake. any
+%time the user is selected on this figure and presses a key, this function
+%is triggered.
 function keyPress(src, event)
+    %switch statement, event.Key is the key being pressed.
     switch(event.Key)
+        %if the up arrow is pressed
         case 'uparrow'
+            %and the snake is going to the right
             if(snake_direction==0)
+                %turn the snake upward or counter clock wise
                 turnCCW;
             end
+            %and the snake is going to the left
             if(snake_direction==2)
+                %turn the snake downward or clock wise
                 turnCW;
             end
+        %if the down arrow is pressed
         case 'downarrow'
+            %snake is going to the right
             if(snake_direction==0)
+                %turn down or clock wise
                 turnCW;
             end
+            %snake is goig to the left
             if(snake_direction==2)
+                %turn the snake down or counter clock wise
                 turnCCW;
             end
+        %if the left arrow is pressed    
         case 'leftarrow'
+            %snake going up
             if(snake_direction==1)
+                %turn left or counter clock wise
                 turnCCW;
             end
+            %snake going down
             if(snake_direction==3)
+                %turn right or clock wise
                 turnCW;
             end
+        %if the right arrow is pressed
         case 'rightarrow'
+            %if the snake is going up
             if(snake_direction==1)
+                %turn to the right or clock wise
                 turnCW;
             end
+            %if the snake is going down
             if(snake_direction==3)
+                %turn to the left or counter clock wise
                 turnCCW;
             end
     end
