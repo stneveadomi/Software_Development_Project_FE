@@ -18,6 +18,8 @@ clc;
 %this is the time between each refresh of the snake.
 speed=0.1;
 
+%if the game is currently paused, >0 is true, 0 is false.
+currently = 0;
 
 %this determines the direction of the snake UP - 1 , RIGHT - 0 , DOWN - 3 ,
 %LEFT - 2
@@ -66,6 +68,7 @@ axis manual;
 %remove the ticks
 set(gca,'YTick', [],'XTick',[]);
 set(gca,'XGrid', 'on','YGrid', 'on');
+set(gca,'Color','black');
 set(gca,'Position',[0.1,0.1,0.8,0.8]);
 hold on
 
@@ -76,6 +79,7 @@ snake_body = [GRAPH_WIDTH/2, GRAPH_HEIGHT/2; GRAPH_WIDTH/2-1, GRAPH_HEIGHT/2; GR
 %initial plot of the snake body, represented by snake_actual. Green squares
 %with a marker size of 10.
 snake_plot=plot(snake_body(:,1),snake_body(:,2),'gs','MarkerSize',10);
+set(snake_plot,'MarkerFaceColor','g');
 
 %this function turns the snake counter clock wise
 %UP - 1 , RIGHT - 0 , DOWN - 3 ,LEFT - 2
@@ -162,7 +166,6 @@ function keyPress(src, event)
             running = 0;
         case 'g'
             growSnake(1);
-            
     end
 end
 
@@ -218,9 +221,6 @@ function growSnake(size)
     snake_body(end+1,:)=snake_body(end,:)-diff;
     end
 end
-        
-
-
 
 %------MAIN---------
 while running
