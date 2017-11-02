@@ -67,7 +67,7 @@ snake_body = [GRAPH_WIDTH/2, GRAPH_HEIGHT/2; GRAPH_WIDTH/2-1, GRAPH_HEIGHT/2; GR
 
 %initial plot of the snake body, represented by snake_actual. Green squares
 %with a marker size of 10.
-snake_actual=plot(snake_body(:,1),snake_body(:,2),'gs','MarkerSize',10);
+snake_plot=plot(snake_body(:,1),snake_body(:,2),'gs','MarkerSize',10);
 
 %this function turns the snake counter clock wise
 %UP - 1 , RIGHT - 0 , DOWN - 3 ,LEFT - 2
@@ -161,9 +161,9 @@ end
 %draws the snake on the board by resetting the x data and the y data.
 function drawSnake()
 %sets all the x values of the snake body to the x data.
-set(snake_actual, 'XData',snake_body(:,1));
+set(snake_plot, 'XData',snake_body(:,1));
 %sets all the y values of the snake body to the y data.
-set(snake_actual,'YData',snake_body(:,2));
+set(snake_plot,'YData',snake_body(:,2));
 
 end
 
@@ -211,50 +211,7 @@ function growSnake(size)
     end
 end
         
-function setup
-%snake body stored in groups of X,Y;
-%first body part is the first column, etc.
-snake_body = [50, 50; 48, 50; 46, 50;];
 
-%this determines the direction of the snake UP - 1 , RIGHT - 0 , DOWN - 3 ,
-%LEFT - 2
-%start snake going in the right direction.
-snake_direction = 0;
-
-%speed of the snake, in units, default is 1, max is 4 units/s.
-snake_speed = 0;
-
-%creates figure, name fig
-disp=figure('Name','Pong','Color','white');
-%get screensize and set it to the Position parameter 
-SCREEN_DIMENSIONS = get(0,'Screensize');
-
-running = 1;
-%width and height of window
-WIDTH = 700;
-HEIGHT = 700;
-%width and height of the graph
-GRAPH_WIDTH=100;
-GRAPH_HEIGHT=100;
-%dimensions in pixels of the screen laid out.
-PLOT_DIMENSIONS = [(SCREEN_DIMENSIONS(3)-WIDTH)/2 (SCREEN_DIMENSIONS(4)-HEIGHT)/2 WIDTH HEIGHT];
-%set the figure into the center of screen with proper dimensions
-set(disp,'Position',PLOT_DIMENSIONS);
-%turn off Resize, toolbar, and menubar (all unnecessary).
-set(disp,'Resize','off');
-set(disp,'ToolBar','none');
-set(disp,'MenuBar','none');
-%makes figure boxed in
-box on;
-
-%set axii to the graph width and height
-axis([0 GRAPH_WIDTH 0 GRAPH_HEIGHT]);
-axis manual;
-%remove the ticks
-set(disp,'YTick', [],'XTick',[]);
-hold on
-snake_actual=plot(snake_body(:,1),snake_body(:,2),'gs','MarkerSize',10);
-end
 
 
 %------MAIN---------
