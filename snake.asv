@@ -231,8 +231,7 @@ end
 %This function returns a boolean value if the snake is colliding. If the
 %function returns a value of 1 if there is a collision, 0 if there isnt.
 function bool=collision()
-        %if the head equals 0 in the x or y or the graph boundaries, return
-        % 1 for a collision.
+        %if the head equals 0 in the
         if(snake_body(1,1)>=GRAPH_WIDTH||snake_body(1,2)>=GRAPH_HEIGHT||snake_body(1,1)<=0||snake_body(1,2)<=0)
             bool=1;
             return;
