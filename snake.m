@@ -215,7 +215,7 @@ end
 %this difference to find the new position of the new segment. Essentially
 %this difference tells the direction of how the snake will grow.
 function growSnake(size)
-    %for i=1 till size,
+    %for i=1 till i=size,
     for i=1:size
     %find the difference between the xy value of the 2nd to last segment of
     %the snake and the last segment of the snake. Use this difference to
@@ -224,8 +224,6 @@ function growSnake(size)
     diff=snake_body(end-1,:)-snake_body(end,:);
     snake_body(end+1,:)=snake_body(end,:)-diff;
     end
-    %slowly increases the snake speed as it grows bigger.
-    speed=speed/1.03;
 end
 
 %This function returns a boolean value if the snake is colliding. If the
