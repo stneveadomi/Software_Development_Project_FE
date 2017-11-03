@@ -40,8 +40,8 @@ running = 1;
 WIDTH = 700;
 HEIGHT = 700;
 %width and height of the graph 0<X<100 and 0<Y<100
-GRAPH_WIDTH=50;
-GRAPH_HEIGHT=50;
+GRAPH_WIDTH=20;
+GRAPH_HEIGHT=20;
 %dimensions in pixels of the screen laid out.
 PLOT_DIMENSIONS = [SCREEN_DIMENSIONS(3)/2-WIDTH/2 SCREEN_DIMENSIONS(4)/2-HEIGHT/2 WIDTH HEIGHT];
 %set the figure into the center of screen with proper dimensions
@@ -118,7 +118,7 @@ function keyPress(src, event)
         %if the up arrow is pressed
         case 'uparrow'
             %and the snake is going to the right
-            if(snake_direction==0&snake_body(1,:)/[2,2]
+            if(snake_direction==0)
                 %turn the snake upward or counter clock wise
                 turnCCW;
             end
@@ -223,11 +223,28 @@ function growSnake(size)
     end
 end
 
+function bool=collision()
+        if(snake_body(1,1)>=GRAPH_WIDTH||snake_body(1,2)>=GRAPH_HEIGHT||snake_body(1,1)<=0||snake_body(1,2)<=0)
+            bool=1;
+            return;
+        end
+        for i=2:length(snake_body)
+            if(snake_body(i,:)==snake_body(1,:))
+                bool=1;
+                return;
+            end
+        end
+        bool=0;
+end
+
 %------MAIN---------
 while running
 
 moveSnake();
 drawSnake;
+if (collision())
+    break;
+end
 pause(speed);
 end
 close all

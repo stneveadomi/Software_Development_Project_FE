@@ -223,11 +223,28 @@ function growSnake(size)
     end
 end
 
+function bool=collision()
+        if(snake_body(1,1)>=GRAPH_WIDTH||snake_body(1,2)>=GRAPH_HEIGHT||snake_body(1,1)<=0||snake_body(1,2)<=0)
+            bool=1;
+            return;
+        end
+        for i=2:length(snake_body)
+            if(snake_body(i,:)==snake_body(1,:))
+                bool=1;
+                return;
+            end
+        end
+        bool=0;
+end
+
 %------MAIN---------
 while running
 
 moveSnake();
 drawSnake;
+if (collision())
+    break;
+end
 pause(speed);
 end
 close all
