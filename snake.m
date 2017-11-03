@@ -27,7 +27,7 @@ currently = 0;
 snake_direction = 0;
 
 %this controls how much space between the snake body parts. DONT TOUCH
-snake_speed = 0.1
+snake_speed = 0.1;
 
 %creates figure, name disp
 disp=figure('units','pixels','Name','Snake the Game','Color','black');
@@ -70,6 +70,9 @@ axis manual;
 set(gca,'YTick', [],'XTick',[]);
 
 set(gca,'Color','black');
+set(gca,'XColor',[1 0 1]);
+set(gca,'YColor',[1 0 1]);
+set(gca,'LineWidth',2);
 set(gca,'Position',[0.1,0.1,0.8,0.8]);
 hold on
 
@@ -221,6 +224,8 @@ function growSnake(size)
     diff=snake_body(end-1,:)-snake_body(end,:);
     snake_body(end+1,:)=snake_body(end,:)-diff;
     end
+    %slowly increases the snake speed as it grows bigger.
+    speed=speed/1.03;
 end
 
 function bool=collision()
