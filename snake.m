@@ -82,7 +82,7 @@ snake_body = [GRAPH_WIDTH/2, GRAPH_HEIGHT/2; GRAPH_WIDTH/2-1, GRAPH_HEIGHT/2; GR
 
 %initial plot of the snake body, represented by snake_actual. Green squares
 %with a marker size of 10.
-snake_plot=plot(snake_body(:,1),snake_body(:,2),'gs','MarkerSize',12);
+snake_plot=plot(snake_body(:,1),snake_body(:,2),'go','MarkerSize',12);
 set(snake_plot,'MarkerFaceColor','g');
 
 %this function turns the snake counter clock wise
