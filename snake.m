@@ -80,10 +80,17 @@ hold on
 %first body part is the first column, etc.
 snake_body = [GRAPH_WIDTH/2, GRAPH_HEIGHT/2; GRAPH_WIDTH/2-1, GRAPH_HEIGHT/2; GRAPH_WIDTH/2-2, GRAPH_HEIGHT/2;];
 
+egg_position=[randi([1,GRAPH_WIDTH-1]),randi([1,GRAPH_HEIGHT-1])];
 %initial plot of the snake body, represented by snake_actual. Green squares
 %with a marker size of 10.
 snake_plot=plot(snake_body(:,1),snake_body(:,2),'go','MarkerSize',12);
 set(snake_plot,'MarkerFaceColor','g');
+
+%this plots the egg initially
+egg_plot=plot(egg_position(1,1),egg_position(1,2),'rh','MarkerSize',12,'MarkerFaceColor','r');
+
+%this sets the snake to a good starting size.
+growSnake(50);
 
 %this function turns the snake counter clock wise
 %UP - 1 , RIGHT - 0 , DOWN - 3 ,LEFT - 2
@@ -168,8 +175,6 @@ function keyPress(src, event)
             end
         case 'escape'
             running = 0;
-        case 'g'
-            growSnake(100);
     end
 end
 
@@ -231,7 +236,7 @@ end
 function bool=collision()
         %if the head equals 0 in the x or y or the graph boundaries, return
         % 1 for a collision.
-        if(snake_body(1,1)>=GRAPH_WIDTH||snake_body(1,2)>=GRAPH_HEIGHT||snake_body(1,1)<=0||snake_body(1,2)<=0)
+        if(snake_body(1,1)>=GRAPH_WIDTH-0.8||snake_body(1,2)>=GRAPH_HEIGHT-0.8||snake_body(1,1)<=0.8||snake_body(1,2)<=0.8)
             bool=1;
             return;
         end
@@ -244,6 +249,44 @@ function bool=collision()
         bool=0;
 end
 
+%this function checks if the snake head is within 1 unit of the marker
+%position, if so, grow snake and reset egg.
+function collisionEgg()
+    difference=egg_position-snake_body(1,:);
+    if (difference(1)<1.4&&difference(1)>-1.4)&&(difference(2)<1.4&&difference(2)>-1.4)
+        growSnake(20);
+        setEgg();
+    end
+end
+
+%this function gets a new egg position and updates the egg on the graph
+function setEgg()
+    getEggPosition();
+    set(egg_plot,'XData',egg_position(1),'YData',egg_position(2))
+end
+
+%this function retrieves a random xy coordinate that is not colliding with
+%the snake and within bounds, then sets that as the new egg_position.
+function getEggPosition()
+    
+    noconflict=1;
+    while noconflict
+    temp=[randi([1,GRAPH_WIDTH-1]),randi([1,GRAPH_HEIGHT-1])];
+    for i=1:length(snake_body)
+            if(snake_body(i,:)==egg_position)
+                noconflict=0;
+            end
+    end
+    if ~noconflict
+        noconflict=1;
+    else
+        noconflict=0;
+    end
+    end
+    egg_position=temp;
+end
+
+
 %------MAIN---------
 while running
 
@@ -252,6 +295,7 @@ drawSnake;
 if (collision())
     break;
 end
+collisionEgg();
 pause(speed);
 end
 close all
