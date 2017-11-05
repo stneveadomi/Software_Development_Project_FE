@@ -16,7 +16,7 @@ clear all;
 clc;
 
 %this is the time between each refresh of the snake.
-speed=0.005;
+speed=0.003;
 
 %if the game is currently paused, >0 is true, 0 is false.
 currently = 0;
@@ -33,6 +33,10 @@ snake_speed = 0.1;
 disp=figure('units','pixels','Name','Snake the Game','Color','black');
 %get screensize and set it to the Position parameter 
 SCREEN_DIMENSIONS = get(0,'Screensize');
+
+%player's score, by default 0.
+PLAYER_SCORE=0;
+
 %running is a boolean variable that breaks the main loop if the game is running or
 %not.
 running = 1;
@@ -91,6 +95,7 @@ egg_plot=plot(egg_position(1,1),egg_position(1,2),'rh','MarkerSize',12,'MarkerFa
 
 %this sets the snake to a good starting size.
 growSnake(50);
+setScore()
 
 %this function turns the snake counter clock wise
 %UP - 1 , RIGHT - 0 , DOWN - 3 ,LEFT - 2
@@ -220,13 +225,15 @@ end
 %this difference to find the new position of the new segment. Essentially
 %this difference tells the direction of how the snake will grow.
 function growSnake(size)
-    %for i=1 till i=size,
-    for i=1:size
     %find the difference between the xy value of the 2nd to last segment of
     %the snake and the last segment of the snake. Use this difference to
     %find the position of the new snake segment. Repeat this till the for
     %loop finishes, essentially increase the snake body by value of size.
     diff=snake_body(end-1,:)-snake_body(end,:);
+    
+    %for i=1 till i=size,
+    
+    for i=1:size
     snake_body(end+1,:)=snake_body(end,:)-diff;
     end
 end
@@ -241,7 +248,6 @@ function bool=collision()
             return;
         end
         for i=2:length(snake_body)
-            diff=snake_body(i,:)
             if(snake_body(i,:)==snake_body(1,:))
                 bool=1;
                 return;
@@ -255,7 +261,8 @@ end
 function collisionEgg()
     difference=egg_position-snake_body(1,:);
     if (difference(1)<1.4&&difference(1)>-1.4)&&(difference(2)<1.4&&difference(2)>-1.4)
-        growSnake(20);
+        growSnake(40);
+        PLAYER_SCORE=PLAYER_SCORE+10;
         setEgg();
     end
 end
@@ -263,41 +270,54 @@ end
 %this function gets a new egg position and updates the egg on the graph
 function setEgg()
     getEggPosition();
-    set(egg_plot,'XData',egg_position(1),'YData',egg_position(2))
+    set(egg_plot,'XData',egg_position(1),'YData',egg_position(2));
+    rgb=randomColor();
+    set(egg_plot,'MarkerEdgeColor',rgb);
+    set(egg_plot,'MarkerFaceColor',rgb);
+    setScore();
 end
 
 %this function retrieves a random xy coordinate that is not colliding with
 %the snake and within bounds, then sets that as the new egg_position.
 function getEggPosition()
-    
     noconflict=1;
     while noconflict
-    temp=[randi([1,GRAPH_WIDTH-1]),randi([1,GRAPH_HEIGHT-1])];
-    for i=1:length(snake_body)
-            if(snake_body(i,:)==egg_position)
-                noconflict=0;
-            end
-    end
-    if ~noconflict
-        noconflict=1;
-    else
-        noconflict=0;
-    end
+        temp=[randi([1,GRAPH_WIDTH-1]),randi([1,GRAPH_HEIGHT-1])];
+        for i=1:length(snake_body)
+            difference=snake_body(i,:)-temp;
+                if(difference(1)<1.4&&difference(1)>-1.4)&&(difference(2)<1.4&&difference(2)>-1.4)
+                    noconflict=0;
+                end
+        end
+        if ~noconflict
+            noconflict=1;
+        else
+            noconflict=0;
+        end
     end
     egg_position=temp;
 end
 
+function setScore()
+    xlabel(['SCORE: ',num2str(PLAYER_SCORE)],'FontSize',20,'Color','w','Font',);
+end
 
+function rgb=randomColor()
+    r=randi(10)/10;
+    g=randi(10)/10;
+    b=randi(10)/10;
+    rgb=[r g b];
+end
 %------MAIN---------
 while running
 
-moveSnake();
-drawSnake;
-if (collision())
-    break;
-end
-collisionEgg();
-pause(speed);
+    moveSnake();
+    drawSnake;
+    if (collision())
+        break;
+    end
+    collisionEgg();
+    pause(speed);
 end
 close all
 end
