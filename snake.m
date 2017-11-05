@@ -16,7 +16,7 @@ clear all;
 clc;
 
 %this is the time between each refresh of the snake.
-speed=0.005;
+speed=0.004;
 
 %if the game is currently paused, >0 is true, 0 is false.
 currently = 0;
