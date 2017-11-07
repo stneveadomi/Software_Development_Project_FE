@@ -82,6 +82,7 @@ hold on
 
 %snake body stored in groups of X,Y;
 %first body part is the first column, etc.
+snake_body = zeros(2,10000);
 snake_body = [GRAPH_WIDTH/2, GRAPH_HEIGHT/2; GRAPH_WIDTH/2-1, GRAPH_HEIGHT/2; GRAPH_WIDTH/2-2, GRAPH_HEIGHT/2;];
 
 egg_position=[randi([1,GRAPH_WIDTH-1]),randi([1,GRAPH_HEIGHT-1])];
@@ -298,10 +299,13 @@ function getEggPosition()
     egg_position=temp;
 end
 
+%this function updates the score at the bottom of the 
 function setScore()
     xlabel(['SCORE: ',num2str(PLAYER_SCORE)],'FontSize',20,'Color','w','FontName','Cambria');
 end
 
+%this function returns a 1x3 array of random values between 0-1,
+%essentially a random RGB value.
 function rgb=randomColor()
     r=randi(10)/10;
     g=randi(10)/10;

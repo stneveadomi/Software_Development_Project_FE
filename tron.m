@@ -1,4 +1,4 @@
-%-------MAIN SCRIPT--------
+%-------MAIN SCRIPT-------w-
 %Any code within this function is automatically executed on start up as
 %this function is the name of the script file.
 %this function has no parameters and is the startup for the game
@@ -9,7 +9,7 @@ clear all;
 clc;
 
 %this is the time between each refresh of the snake.
-speed=0.05;
+speed=0.035;
 
 %if the game is currently paused, >0 is true, 0 is false.
 currently = 0;
@@ -66,17 +66,24 @@ box on;
 axis([0 GRAPH_WIDTH 0 GRAPH_HEIGHT]);
 axis manual;
 %remove the ticks
-set(gca,'YTick', [],'XTick',[]);
+XTick=1:GRAPH_WIDTH;
+YTick=1:GRAPH_HEIGHT;
+
+set(gca,'YTick', YTick,'XTick',XTick);
 set(gca,'Color','black');
 set(gca,'XColor','w');
 set(gca,'YColor','w');
 set(gca,'LineWidth',1);
 set(gca,'Position',[0.1,0.1,0.8,0.8]);
+set(gca,'TickLength',[0,0]);
 grid on
 hold on
 
 %snake body stored in groups of X,Y;
 %first body part is the first column, etc.
+%preallocating space for the lines to save time.
+player1_body=zeros(2,10000);
+player2_body=zeros(2,10000);
 player1_body=[GRAPH_WIDTH/4 GRAPH_HEIGHT/2;GRAPH_WIDTH/4-bike_speed GRAPH_HEIGHT/2];
 player2_body=[GRAPH_WIDTH*3/4 GRAPH_HEIGHT/2;GRAPH_WIDTH*3/4+bike_speed GRAPH_HEIGHT/2];
 
