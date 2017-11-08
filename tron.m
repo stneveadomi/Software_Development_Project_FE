@@ -8,7 +8,7 @@ close all;
 clear;
 clc;
 
-%this is the time between each refresh of the snake.
+%this is the time between each refresh of the player.
 speed=0.03;
 
 %this variable tells if to keep playing
@@ -23,7 +23,7 @@ endGame = 0;
 %main loop of the game, if the game is currently active.
 currently = 1;
 
-%this determines the direction of the snake UP - 1 , RIGHT - 0 , DOWN - 3 ,
+%this determines the direction of the player UP - 1 , RIGHT - 0 , DOWN - 3 ,
 %LEFT - 2
 %start player1 going in the right direction and player2 in the left.
 player1_direction = 0;
@@ -80,6 +80,7 @@ XTick=1:GRAPH_WIDTH;
 YTick=1:GRAPH_HEIGHT;
 
 set(gca,'YTick', YTick,'XTick',XTick);
+set(gca,'YTickLabel', [],'XTickLabel',[]);
 set(gca,'Color','black');
 set(gca,'XColor','w');
 set(gca,'YColor','w');
@@ -89,7 +90,7 @@ set(gca,'TickLength',[0,0]);
 grid on
 hold on
 
-%snake body stored in groups of X,Y;
+%player body stored in groups of X,Y;
 %first body part is the first column, etc.
 %preallocating space for the lines to save time.
 player1_body=zeros(2,10000);
@@ -97,18 +98,18 @@ player2_body=zeros(2,10000);
 player1_body=[GRAPH_WIDTH/4 GRAPH_HEIGHT/2;GRAPH_WIDTH/4-bike_speed GRAPH_HEIGHT/2];
 player2_body=[GRAPH_WIDTH*3/4 GRAPH_HEIGHT/2;GRAPH_WIDTH*3/4+bike_speed GRAPH_HEIGHT/2];
 
-%initial plot of the snake body, represented by snake_actual. Green squares
-%with a marker size of 10.
+%initial plot of the player body, represented by player_plot. b and r
+%squares with size of 12.
 player1_plot=plot(player1_body(:,1),player1_body(:,2),'bs','MarkerSize',12);
 set(player1_plot,'MarkerFaceColor','b');
 
 player2_plot=plot(player2_body(:,1),player2_body(:,2),'rs','MarkerSize',12);
 set(player2_plot,'MarkerFaceColor','r');
 
-%this function turns the snake counter clock wise
+%this function turns the player counter clock wise
 %UP - 1 , RIGHT - 0 , DOWN - 3 ,LEFT - 2
     function newDir=turnCCW(curDir)
-        %if the snake direction is 3, set to 0, as adding 1 to it would break
+        %if the player direction is 3, set to 0, as adding 1 to it would break
         %the system. Essentially this is turning it clockwise but due to the
         %nature of the direction system, this is necessary.
         if(curDir==3)
@@ -119,7 +120,7 @@ set(player2_plot,'MarkerFaceColor','r');
         end
     end
 
-%this function turns the snake clock wise
+%this function turns the player clock wise
 %UP - 1 , RIGHT - 0 , DOWN - 3 ,LEFT - 2
     function newDir=turnCW(curDir)
         %must manually set 0 to 3 as subtracting 1 would not work.
@@ -132,7 +133,7 @@ set(player2_plot,'MarkerFaceColor','r');
         end
     end
 
-%this function is embedded into the figure disp which holds the snake. any
+%this function is embedded into the figure disp which holds the player. any
 %time the user is selected on this figure and presses a key, this function
 %is triggered.
     function keyPress(src, event)
@@ -140,95 +141,95 @@ set(player2_plot,'MarkerFaceColor','r');
         switch(event.Key)
             %if the up arrow is pressed
             case 'uparrow'
-                %and the snake is going to the right
+                %and the player is going to the right
                 if(player2_direction==0)
-                    %turn the snake upward or counter clock wise
+                    %turn the player upward or counter clock wise
                     player2_direction=turnCCW(player2_direction);
                 end
-                %and the snake is going to the left
+                %and the player is going to the left
                 if(player2_direction==2)
-                    %turn the snake downward or clock wise
+                    %turn the player downward or clock wise
                     player2_direction=turnCW(player2_direction);
                 end
                 %if the down arrow is pressed
             case 'downarrow'
-                %snake is going to the right
+                %player is going to the right
                 if(player2_direction==0)
                     %turn down or clock wise
                     player2_direction=turnCW(player2_direction);
                 end
-                %snake is goig to the left
+                %player is goig to the left
                 if(player2_direction==2)
-                    %turn the snake down or counter clock wise
+                    %turn the player down or counter clock wise
                     player2_direction=turnCCW(player2_direction);
                 end
                 %if the left arrow is pressed
             case 'leftarrow'
-                %snake going up
+                %player going up
                 if(player2_direction==1)
                     %turn left or counter clock wise
                     player2_direction=turnCCW(player2_direction);
                 end
-                %snake going down
+                %player going down
                 if(player2_direction==3)
                     %turn right or clock wise
                     player2_direction=turnCW(player2_direction);
                 end
                 %if the right arrow is pressed
             case 'rightarrow'
-                %if the snake is going up
+                %if the player is going up
                 if(player2_direction==1)
                     %turn to the right or clock wise
                     player2_direction=turnCW(player2_direction);
                 end
-                %if the snake is going down
+                %if the player is going down
                 if(player2_direction==3)
                     %turn to the left or counter clock wise
                     player2_direction=turnCCW(player2_direction);
                 end
             case 'w'
-                %and the snake is going to the right
+                %and the player is going to the right
                 if(player1_direction==0)
-                    %turn the snake upward or counter clock wise
+                    %turn the player upward or counter clock wise
                     player1_direction=turnCCW(player1_direction);
                 end
-                %and the snake is going to the left
+                %and the player is going to the left
                 if(player1_direction==2)
-                    %turn the snake downward or clock wise
+                    %turn the player downward or clock wise
                     player1_direction=turnCW(player1_direction);
                 end
                 %if the down arrow is pressed
             case 's'
-                %snake is going to the right
+                %player is going to the right
                 if(player1_direction==0)
                     %turn down or clock wise
                     player1_direction=turnCW(player1_direction);
                 end
-                %snake is goig to the left
+                %player is goig to the left
                 if(player1_direction==2)
-                    %turn the snake down or counter clock wise
+                    %turn the player down or counter clock wise
                     player1_direction=turnCCW(player1_direction);
                 end
                 %if the left arrow is pressed
             case 'a'
-                %snake going up
+                %player going up
                 if(player1_direction==1)
                     %turn left or counter clock wise
                     player1_direction=turnCCW(player1_direction);
                 end
-                %snake going down
+                %player going down
                 if(player1_direction==3)
                     %turn right or clock wise
                     player1_direction=turnCW(player1_direction);
                 end
                 %if the right arrow is pressed
             case 'd'
-                %if the snake is going up
+                %if the player is going up
                 if(player1_direction==1)
                     %turn to the right or clock wise
                     player1_direction=turnCW(player1_direction);
                 end
-                %if the snake is going down
+                %if the player is going down
                 if(player1_direction==3)
                     %turn to the left or counter clock wise
                     player1_direction=turnCCW(player1_direction);
@@ -244,35 +245,35 @@ set(player2_plot,'MarkerFaceColor','r');
         end
     end
 
-%draws the snake on the board by resetting the x data and the y data.
+%draws the player on the board by resetting the x data and the y data.
     function drawLine()
-        %sets all the x values of the snake body to the x data.
+        %sets all the x values of the player body to the x data.
         set(player1_plot, 'XData',player1_body(:,1));
-        %sets all the y values of the snake body to the y data.
+        %sets all the y values of the player body to the y data.
         set(player1_plot,'YData',player1_body(:,2));
         
-        %sets all the x values of the snake body to the x data.
+        %sets all the x values of the player body to the x data.
         set(player2_plot, 'XData',player2_body(:,1));
-        %sets all the y values of the snake body to the y data.
+        %sets all the y values of the player body to the y data.
         set(player2_plot,'YData',player2_body(:,2))
         
         
     end
 
-%moves the snake in the proper direction.
+%moves the player in the proper direction.
     function player_body=movePlayers(currentDirection,player_body)
         %now depending on the direction it is going, set the new head position
-        %(or first body position) in the correct direction the snake is heading
+        %(or first body position) in the correct direction the player is heading
         player_body(2:end+1,:)=player_body(:,:);
-        %eg if snake is going to the right( dir=0)
+        %eg if player is going to the right( dir=0)
         if currentDirection==0
-            %set the head to the current head position increased by the snake_speed
+            %set the head to the current head position increased by the player_speed
             %in the x direction (increasing the x position as it is going right)
-            %snake_speed is the distance between each segment.
+            %player_speed is the distance between each segment.
             player_body(1,:)=[player_body(1,1)+bike_speed,player_body(1,2)];
-            %if snake going up
+            %if player going up
         elseif currentDirection==1
-            %set the head to the snake_speed + current y, to make it move up.
+            %set the head to the player_speed + current y, to make it move up.
             player_body(1,:)=[player_body(1,1),player_body(1,2)+bike_speed];
             %same concepts apply
         elseif currentDirection==2
@@ -284,7 +285,7 @@ set(player2_plot,'MarkerFaceColor','r');
     end
 
 
-%This function returns a boolean value if the snake is colliding. If the
+%This function returns a boolean value if the player is colliding. If the
 %function returns a value of 1 if there is a collision, 0 if there isnt.
     function bool=collision()
         %if the head equals 0 in the x or y or the graph boundaries, return
@@ -293,14 +294,17 @@ set(player2_plot,'MarkerFaceColor','r');
             bool=1;
             return;
         end
+        %if player2 is in bounds
         if(player2_body(1,1)>=GRAPH_WIDTH-0.8||player2_body(1,2)>=GRAPH_HEIGHT-0.8||player2_body(1,1)<=0.8||player2_body(1,2)<=0.8)
             bool=1;
             return;
         end
+        %head on collision between the two bikes
         if(isequal(player1_body(1,:),player2_body(1,:)))
             bool=1;
             return;
         end
+        %for the entire array
         for i=2:length(player1_body)
             if(isequal(player1_body(i,:),player1_body(1,:))||isequal(player2_body(i,:),player2_body(1,:)))
                 bool=1;
@@ -331,7 +335,7 @@ set(player2_plot,'MarkerFaceColor','r');
 %other players score by 1.
     function addScore()
         if(isequal(player1_body(1,:),player2_body(1,:)))
-            %tie
+            %tie, no score is added.
             return;
         end
         if(player1_body(1,1)>=GRAPH_WIDTH-0.8||player1_body(1,2)>=GRAPH_HEIGHT-0.8||player1_body(1,1)<=0.8||player1_body(1,2)<=0.8)

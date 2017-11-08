@@ -15,6 +15,7 @@ close all;
 clear all;
 clc;
 
+%read initial highscores
 [scores names] = xlsread('highscores.xlsx');
 
 
