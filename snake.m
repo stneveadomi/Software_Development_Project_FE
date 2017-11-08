@@ -15,7 +15,7 @@ close all;
 clear all;
 clc;
 
-[scores names] = xlsread('highscores.xlsx')
+[scores names] = xlsread('highscores.xlsx');
 
 
 %this is the time between each refresh of the snake.
@@ -320,37 +320,45 @@ txt3 = 0;
         b=randi(10)/10;
         rgb=[r g b];
     end
-
+    
+    %this updates the score values from the xl document.
     function updateScores()
-        [scores names] = xlsread('highscores.xlsx')
+        [scores names] = xlsread('highscores.xlsx');
     end
 
+    %this function takes in the index of the new high score and then shifts
+    %the scores and names accordingly, also it receives the name value from
+    %the user by using a inputdlg.
     function newHighScore(index)
-        scores(index+1:end)=scores(index:end-1)
+        scores(index+1:end)=scores(index:end-1);
         names(index+1:end)=names(index:end-1);
         scores(index)=PLAYER_SCORE;
         names(index)=inputdlg('Enter your high score name:','Snake');
         writeScores();
         
     end
-
+    
+    %this function writes the current values of scores and names to the
+    %Excel file in the appropriate columns.
     function writeScores()
         xlswrite('highscores.xlsx',scores,'score','B1:B10');
         xlswrite('highscores.xlsx',names,'score','A1:A10');
     end
     
+    %this function creates the string for the score board that will be
+    %displayed in a text obj
     function arr=displayScoreBoard()
-        arr = sprintf(['Top Ten in Snake \n',...
-               '1: ', names{1},num2str(scores(1)), '\n'...
-               '2: ', names{2},num2str(scores(2)), '\n'...
-               '3: ', names{3},num2str(scores(3)), '\n'...
-               '4: ', names{4},num2str(scores(4)), '\n'...
-               '5: ', names{5},num2str(scores(5)), '\n'...
-               '6: ', names{6},num2str(scores(6)), '\n'...
-               '7: ', names{7},num2str(scores(7)), '\n'...
-               '8: ', names{8},num2str(scores(8)), '\n'...
-               '9: ', names{9},num2str(scores(9)), '\n'...
-               '10: ', names{10},num2str(scores(10)), '\n']);
+        arr = sprintf(['=====Top 10 High Scores=====\n',...
+               '1: ', names{1},'     ',num2str(scores(1)), '\n'...
+               '2: ', names{2},'     ',num2str(scores(2)), '\n'...
+               '3: ', names{3},'     ',num2str(scores(3)), '\n'...
+               '4: ', names{4},'     ',num2str(scores(4)), '\n'...
+               '5: ', names{5},'     ',num2str(scores(5)), '\n'...
+               '6: ', names{6},'     ',num2str(scores(6)), '\n'...
+               '7: ', names{7},'     ',num2str(scores(7)), '\n'...
+               '8: ', names{8},'     ',num2str(scores(8)), '\n'...
+               '9: ', names{9},'     ',num2str(scores(9)), '\n'...
+               '10: ', names{10},'     ',num2str(scores(10)), '\n']);
                
         return;
     end
@@ -361,27 +369,32 @@ txt3 = 0;
         drawSnake;
         set(egg_plot,'XData',-2,'YData',-2);
         txt1=text(GRAPH_WIDTH/2,GRAPH_HEIGHT/2+5,['Your Score: ',num2str(PLAYER_SCORE)]);
-        txt1.Color='white';
+        txt1.Color='green';
         txt1.FontSize=24;
         txt1.HorizontalAlignment='center';
         text_2='Sorry, you did not make the score board, try again!';
         for i=1:length(scores)
             if scores(i)<=PLAYER_SCORE
-                text_2='Congratulations, you made the score board!';
+                text_2='Congratulations, you made the Big Ten!';
                 newHighScore(i);
                 break;
             end
         end
-        displayScoreBoard();
-        txt2=text(GRAPH_WIDTH/2,GRAPH_HEIGHT/2-10,displayScoreBoard());
-        txt2.Color='white';
+        txt3=text(GRAPH_WIDTH/2,GRAPH_HEIGHT/2+10,text_2);
+        txt3.Color='y';
+        txt3.FontSize=20;
+        txt3.HorizontalAlignment='center';
+        txt2=text(GRAPH_WIDTH/2-10,GRAPH_HEIGHT/2-10,displayScoreBoard());
+        txt2.Color='magenta';
         txt2.FontSize=12;
-        txt2.HorizontalAlignment='center';
+        txt2.HorizontalAlignment='left';
         %placeholder
         pause(10);
         currently=0;
     end
 
+    %this function resets all the important values of the game in order to play
+    %another game.
     function reset()
         updateScores();
         snake_direction = 0;
@@ -395,8 +408,10 @@ txt3 = 0;
 
 
 %------MAIN---------
+%while currently running the game itself
 while currently
     
+%while mid game
 while running
     
     moveSnake();
