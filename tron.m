@@ -9,7 +9,16 @@ clear;
 clc;
 
 %this is the time between each refresh of the snake.
-speed=0.035;
+speed=0.03;
+
+%this variable tells if to keep playing
+keepPlaying = 0;
+
+
+%this variable tells if to stop playing
+stopPlaying=0;
+
+endGame = 0;
 
 %main loop of the game, if the game is currently active.
 currently = 1;
@@ -225,10 +234,12 @@ set(player2_plot,'MarkerFaceColor','r');
                     player1_direction=turnCCW(player1_direction);
                 end
             case 'escape'
-                currently = 0;
-                running = 0;
+                if endGame
+                    stopPlaying=0;
+                end
             case 'return'
-                if ~running
+                if endGame
+                    keepPlaying=0;
                 end
         end
     end
@@ -385,10 +396,16 @@ set(player2_plot,'MarkerFaceColor','r');
         end
         txt1=text(GRAPH_WIDTH/2,GRAPH_HEIGHT/2+20,['THE WINNER IS PLAYER',winner]);
         txt1.Color='white';
-        txt1.FontSize=54;
-        txt2=text(GRAPH_WIDTH/2,GRAPH_HEIGHT/2+20,'Play again? Hit return to play again or escape to quit.');
+        txt1.FontSize=24;
+        txt1.HorizontalAlignment='center';
+        txt2=text(GRAPH_WIDTH/2,GRAPH_HEIGHT/2,'Play again? Hit return to play again or escape to quit.');
         txt2.Color='white';
-        txt2.FontSize=54;
+        txt2.FontSize=24;
+        txt2.HorizontalAlignment='center';
+        while(true)
+            if keepPlaying
+            end
+        end
         PLAYER1_SCORE =0;
         PLAYER2_SCORE =0;
     end
@@ -405,7 +422,7 @@ set(player2_plot,'MarkerFaceColor','r');
 while currently
     
     setScore();
-    if(PLAYER1_SCORE+PLAYER2_SCORE>4)
+    if(PLAYER1_SCORE>2||PLAYER2_SCORE>2)
         closeMenu();
         tron();
     else
