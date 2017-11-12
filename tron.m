@@ -305,11 +305,11 @@ set(player2_plot,'MarkerFaceColor','r');
             return;
         end
         %for the entire array
+        if(ismember(player1_body(1,:),player1_body(2:end,:),'rows')||ismember(player2_body(1,:),player2_body(2:end,:),'rows'))
+            bool=1;
+            return;
+        end
         for i=2:length(player1_body)
-            if(isequal(player1_body(i,:),player1_body(1,:))||isequal(player2_body(i,:),player2_body(1,:)))
-                bool=1;
-                return;
-            end
             diff1=(player1_body(1,:)-player2_body(i,:));
             
             if(diff1(1)<1&&diff1(1)>-1&&diff1(2)<1&&diff1(2)>-1)
