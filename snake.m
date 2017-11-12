@@ -257,11 +257,9 @@ txt3 = 0;
             bool=1;
             return;
         end
-        for i=2:length(snake_body)
-            if(snake_body(i,:)==snake_body(1,:))
-                bool=1;
-                return;
-            end
+        if(ismember(snake_body(1,:),snake_body(2:end,:),'rows'))
+            bool=1;
+            return;
         end
         bool=0;
     end
@@ -413,11 +411,14 @@ txt3 = 0;
 while currently
     
 %while mid game
+pause(5);
 while running
     
     moveSnake();
     drawSnake;
     if (collision())
+        %[y,Fs]=audioread('0477.wav');
+        %sound(y,Fs);
         running=0;
         break;
     end
