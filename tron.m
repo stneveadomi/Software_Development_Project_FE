@@ -1,4 +1,13 @@
-%-------MAIN SCRIPT-------w-
+%+===============================+
+%+        TRON in MATLAB         +
+%+  Created by Steven Neveadomi  +
+%+    11/14/17 for ENGR1181      +
+%+          Dr. Bixler           +
+%+ With help from Bryce Pember,  +
+%+ Tori Aber, and Lily Ostrander +
+%+===============================+
+
+%-------MAIN SCRIPT--------
 %Any code within this function is automatically executed on start up as
 %this function is the name of the script file.
 %this function has no parameters and is the startup for the game
@@ -11,14 +20,8 @@ clc;
 %this is the time between each refresh of the player.
 speed=0.03;
 
-%this variable tells if to keep playing
-keepPlaying = 0;
-
-
-%this variable tells if to stop playing
-stopPlaying=0;
-
-endGame = 0;
+%this variable tells if the game is currently paused
+paused=0;
 
 %main loop of the game, if the game is currently active.
 currently = 1;
@@ -234,15 +237,8 @@ set(player2_plot,'MarkerFaceColor','r');
                     %turn to the left or counter clock wise
                     player1_direction=turnCCW(player1_direction);
                 end
-            case 'escape'
-                if endGame
-                    stopPlaying=0;
-                end
-            case 'return'
-                if endGame
-                    keepPlaying=0;
-                end
         end
+        paused = 0;
     end
 
 %draws the player on the board by resetting the x data and the y data.
@@ -325,7 +321,7 @@ set(player2_plot,'MarkerFaceColor','r');
         bool=0;
     end
 
-
+%this function updates the scoreboard at the bottom of the graph.
     function setScore()
         xlabel(['PLAYER 1 SCORE: ',num2str(PLAYER1_SCORE),'             PLAYER 2 SCORE: ',num2str(PLAYER2_SCORE)],'FontSize',30,'Color','k','FontName','Terminal');
     end
@@ -369,6 +365,8 @@ set(player2_plot,'MarkerFaceColor','r');
         end
     end
 
+
+%this function generates a randomColor in [r g b] form.
     function rgb=randomColor()
         r=randi(10)/10;
         g=randi(10)/10;
@@ -376,6 +374,7 @@ set(player2_plot,'MarkerFaceColor','r');
         rgb=[r g b];
     end
 
+    %this function counts down via text on the screen.
     function countDown()
         txt=text(GRAPH_WIDTH/2,GRAPH_HEIGHT/2,'READY!');
         txt.Color = 'red';
@@ -385,12 +384,14 @@ set(player2_plot,'MarkerFaceColor','r');
         set(txt,'String','SET!');
         txt.Color = 'yellow';
         pause(1);
-        set(txt,'String','plz send nudes');
+        set(txt,'String','GO!');
         txt.Color = 'green';
         pause(0.5);
         set(txt,'String','');
     end
-    
+
+    %this function displays the winner of the game and then prompts the
+    %user if they want to play again.
     function closeMenu()
         winner='0';
         if PLAYER1_SCORE>PLAYER2_SCORE
@@ -398,22 +399,32 @@ set(player2_plot,'MarkerFaceColor','r');
         else
             winner = '2';
         end
-        txt1=text(GRAPH_WIDTH/2,GRAPH_HEIGHT/2+20,['THE WINNER IS PLAYER',winner]);
-        txt1.Color='white';
-        txt1.FontSize=24;
+        txt1=text(GRAPH_WIDTH/2,GRAPH_HEIGHT/2-10,['THE WINNER IS PLAYER ',winner]);
+        txt1.Color='g';
+        txt1.FontName='Impact';
+        txt1.FontSize=42;
         txt1.HorizontalAlignment='center';
-        txt2=text(GRAPH_WIDTH/2,GRAPH_HEIGHT/2,'Play again? Hit return to play again or escape to quit.');
-        txt2.Color='white';
-        txt2.FontSize=24;
-        txt2.HorizontalAlignment='center';
-        while(true)
-            if keepPlaying
-            end
+        %prompt player to see if they would like to play again.
+        promptstr=questdlg('Would you like to play again?','Tron','Yes','No','No');
+        txt1.String='';
+        %reset all values and go straight into the countdown
+        if isequal(promptstr,'Yes')
+            currently=1;
+            running=1;
+            PLAYER1_SCORE =0;
+            PLAYER2_SCORE =0;
+            reset();
+            setScore();
+            drawLine();
+            countDown();
+        else%set currently to 0, end game
+            currently=0;
         end
-        PLAYER1_SCORE =0;
-        PLAYER2_SCORE =0;
+        
+        
     end
 
+%this function resets the player positions
     function reset()
         player1_direction = 0;
         player2_direction = 2;
@@ -422,13 +433,14 @@ set(player2_plot,'MarkerFaceColor','r');
         player1_body=[GRAPH_WIDTH/4 GRAPH_HEIGHT/2;GRAPH_WIDTH/4-bike_speed GRAPH_HEIGHT/2];
         player2_body=[GRAPH_WIDTH*3/4 GRAPH_HEIGHT/2;GRAPH_WIDTH*3/4+bike_speed GRAPH_HEIGHT/2];        
     end
+
 %------MAIN---------
 while currently
     
     setScore();
     if(PLAYER1_SCORE>2||PLAYER2_SCORE>2)
         closeMenu();
-        tron();
+        
     else
         reset();
         drawLine;
@@ -446,8 +458,7 @@ while currently
             running=0;
         end
         pause(speed);
-    end
-    
+    end    
 end
 close all
 end

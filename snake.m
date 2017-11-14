@@ -1,9 +1,11 @@
-
-%************************************************
-%* Name: Steven Neveadomi Date: 10/27/17 *
-%* Seat/Table: 47 File: Class_SDP_Prep_App.m *
-%* Instructor: Bixler 11:10 *
-%************************************************
+%+===============================+
+%+       SNAKE in MATLAB         +
+%+  Created by Steven Neveadomi  +
+%+    11/14/17 for ENGR1181      +
+%+          Dr. Bixler           +
+%+ With help from: Bryce Pember, +
+%+ Tori Aber, and Lily Ostrander +
+%+===============================+
 
 %-------MAIN SCRIPT--------
 %Any code within this function is automatically executed on start up as
