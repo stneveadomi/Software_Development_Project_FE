@@ -18,6 +18,8 @@ clc;
 %read initial highscores
 [scores names] = xlsread('highscores.xlsx');
 
+%if the game is paused
+paused=0;
 
 %this is the time between each refresh of the snake.
 speed=0.003;
@@ -37,10 +39,8 @@ snake_speed = 0.1;
 disp=figure('units','pixels','Name','Snake the Game','Color','black');
 %get screensize and set it to the Position parameter
 SCREEN_DIMENSIONS = get(0,'Screensize');
-
 %player's score, by default 0.
 PLAYER_SCORE=0;
-
 %running is a boolean variable that breaks the main loop if the game is running or
 %not.
 running = 1;
@@ -52,6 +52,7 @@ GRAPH_WIDTH=50;
 GRAPH_HEIGHT=50;
 %dimensions in pixels of the screen laid out.
 PLOT_DIMENSIONS = [SCREEN_DIMENSIONS(3)/2-WIDTH/2 SCREEN_DIMENSIONS(4)/2-HEIGHT/2 WIDTH HEIGHT];
+
 %set the figure into the center of screen with proper dimensions
 set(disp,'Position',PLOT_DIMENSIONS);
 %turn off Resize, toolbar, and menubar (all unnecessary).
@@ -62,21 +63,13 @@ set(disp,'MenuBar','none');
 %pressed to the KeyPress function created.
 set(disp,'KeyPressFcn',@keyPress);
 
-
-%https://www.mathworks.com/help/matlab/ref/matlab.graphics.primitive.text-properties.html
-title('Snake the Game','Color','white','FontName','Cambria','FontSize',20);
-
 %makes figure boxed in
 box on;
-
-
-
 %set axii to the graph width and height
 axis([0 GRAPH_WIDTH 0 GRAPH_HEIGHT]);
 axis manual;
 %remove the ticks
 set(gca,'YTick', [],'XTick',[]);
-
 set(gca,'Color','black');
 set(gca,'XColor',[1 0 1]);
 set(gca,'YColor',[1 0 1]);
@@ -84,11 +77,16 @@ set(gca,'LineWidth',2);
 set(gca,'Position',[0.1,0.1,0.8,0.8]);
 hold on
 
+%display main menu
+mainMenu();
+
+
 %snake body stored in groups of X,Y;
 %first body part is the first column, etc.
 snake_body = zeros(2,10000);
-snake_body = [GRAPH_WIDTH/2, GRAPH_HEIGHT/2; GRAPH_WIDTH/2-1, GRAPH_HEIGHT/2; GRAPH_WIDTH/2-2, GRAPH_HEIGHT/2;];
 
+snake_body = [GRAPH_WIDTH/2, GRAPH_HEIGHT/2; GRAPH_WIDTH/2-snake_speed, GRAPH_HEIGHT/2; GRAPH_WIDTH/2-2*snake_speed, GRAPH_HEIGHT/2;];
+growSnake(50);
 egg_position=[randi([1,GRAPH_WIDTH-1]),randi([1,GRAPH_HEIGHT-1])];
 %initial plot of the snake body, represented by snake_actual. Green squares
 %with a marker size of 10.
@@ -98,14 +96,18 @@ set(snake_plot,'MarkerFaceColor','g');
 %this plots the egg initially
 egg_plot=plot(egg_position(1,1),egg_position(1,2),'rh','MarkerSize',12,'MarkerFaceColor','r');
 
-%this sets the snake to a good starting size.
-growSnake(50);
-setScore()
+
 
 %used to display text
 txt1 = 0;
 txt2 = 0;
 txt3 = 0;
+
+
+%display title
+title('Snake','Color','white','FontName','Rockwell','FontSize',20);
+%set the initial score
+setScore()
 
 %this function turns the snake counter clock wise
 %UP - 1 , RIGHT - 0 , DOWN - 3 ,LEFT - 2
@@ -191,6 +193,7 @@ txt3 = 0;
             case 'escape'
                 running = 0;
         end
+        paused=0;
     end
 
 %draws the snake on the board by resetting the x data and the y data.
@@ -348,15 +351,15 @@ txt3 = 0;
     %displayed in a text obj
     function arr=displayScoreBoard()
         arr = sprintf(['=====Top 10 High Scores=====\n',...
-               '1: ', names{1},'     ',num2str(scores(1)), '\n'...
-               '2: ', names{2},'     ',num2str(scores(2)), '\n'...
-               '3: ', names{3},'     ',num2str(scores(3)), '\n'...
-               '4: ', names{4},'     ',num2str(scores(4)), '\n'...
-               '5: ', names{5},'     ',num2str(scores(5)), '\n'...
-               '6: ', names{6},'     ',num2str(scores(6)), '\n'...
-               '7: ', names{7},'     ',num2str(scores(7)), '\n'...
-               '8: ', names{8},'     ',num2str(scores(8)), '\n'...
-               '9: ', names{9},'     ',num2str(scores(9)), '\n'...
+               ' 1: ', names{1},'     ',num2str(scores(1)), '\n'...
+               ' 2: ', names{2},'     ',num2str(scores(2)), '\n'...
+               ' 3: ', names{3},'     ',num2str(scores(3)), '\n'...
+               ' 4: ', names{4},'     ',num2str(scores(4)), '\n'...
+               ' 5: ', names{5},'     ',num2str(scores(5)), '\n'...
+               ' 6: ', names{6},'     ',num2str(scores(6)), '\n'...
+               ' 7: ', names{7},'     ',num2str(scores(7)), '\n'...
+               ' 8: ', names{8},'     ',num2str(scores(8)), '\n'...
+               ' 9: ', names{9},'     ',num2str(scores(9)), '\n'...
                '10: ', names{10},'     ',num2str(scores(10)), '\n']);
                
         return;
@@ -367,29 +370,37 @@ txt3 = 0;
         snake_body = zeros(2,10000);
         drawSnake;
         set(egg_plot,'XData',-2,'YData',-2);
-        txt1=text(GRAPH_WIDTH/2,GRAPH_HEIGHT/2+5,['Your Score: ',num2str(PLAYER_SCORE)]);
+        txt1=text(GRAPH_WIDTH/2,GRAPH_HEIGHT/2+10,['Your Score: ',num2str(PLAYER_SCORE)]);
         txt1.Color='green';
         txt1.FontSize=24;
+        txt1.FontName='Impact';
         txt1.HorizontalAlignment='center';
-        text_2='Sorry, you did not make the score board, try again!';
+        text_3='Sorry, you did not make the score board, try again!';
         for i=1:length(scores)
             if scores(i)<=PLAYER_SCORE
-                text_2='Congratulations, you made the Big Ten!';
+                text_3='Congratulations, you made the Big Ten!';
                 newHighScore(i);
                 break;
             end
         end
-        txt3=text(GRAPH_WIDTH/2,GRAPH_HEIGHT/2+10,text_2);
+        txt3=text(GRAPH_WIDTH/2,GRAPH_HEIGHT/2+20,text_3);
         txt3.Color='y';
-        txt3.FontSize=20;
+        txt3.FontSize=18;
         txt3.HorizontalAlignment='center';
-        txt2=text(GRAPH_WIDTH/2-10,GRAPH_HEIGHT/2-10,displayScoreBoard());
-        txt2.Color='magenta';
-        txt2.FontSize=12;
-        txt2.HorizontalAlignment='left';
-        %placeholder
-        pause(10);
-        currently=0;
+        txt2=text(GRAPH_WIDTH/2,GRAPH_HEIGHT/2-10,displayScoreBoard());
+        txt2.Color='w';
+        txt2.FontSize=14;
+        txt2.HorizontalAlignment='center';
+        %paused=1;
+        pause(2);
+        %prompt player to see if they would like to play again.
+        promptstr=questdlg('Would you like to play again?','Snake','Yes','No','No');
+        if isequal(promptstr,'Yes')
+            currently=1;
+        else
+            currently=0;
+        end
+        
     end
 
     %this function resets all the important values of the game in order to play
@@ -398,20 +409,96 @@ txt3 = 0;
         updateScores();
         snake_direction = 0;
         snake_body = zeros(2,10000);
-        snake_body = [GRAPH_WIDTH/2, GRAPH_HEIGHT/2; GRAPH_WIDTH/2-1, GRAPH_HEIGHT/2; GRAPH_WIDTH/2-2, GRAPH_HEIGHT/2;];
+        snake_body = [GRAPH_WIDTH/2, GRAPH_HEIGHT/2; GRAPH_WIDTH/2-snake_speed, GRAPH_HEIGHT/2; GRAPH_WIDTH/2-2*snake_speed, GRAPH_HEIGHT/2;];
+        growSnake(50);
         PLAYER_SCORE = 0;
+        setScore();
         txt1.String='';
         txt2.String='';
-        
+        txt3.String='';
+        drawSnake;
+        setEgg();
+        running=1;
+    end
+    
+%this function displays the main menu and waits for the user to enter a key
+%in order to continue.
+    function mainMenu
+        %mtxt1,2,3,4 all are various text strings to be displayed.
+        mainlogo='SNAKE';
+        %place the text on the figure
+        mtxt1=text(GRAPH_WIDTH/2,GRAPH_HEIGHT/2+20,mainlogo);
+        %more properties of each text
+        mtxt1.Color='w';
+        mtxt1.FontSize=40;
+        mtxt1.HorizontalAlignment='center';
+        mtxt1.FontName='Rockwell';
+        %this continues for the rest.
+        credits = 'Created by Steven Neveadomi, Bryce Pember, Lillian Ostrander, and Tori Aber';
+        mtxt2=text(GRAPH_WIDTH/2,GRAPH_HEIGHT/2+14,credits);
+        mtxt2.Color='green';
+        mtxt2.FontSize=10;
+        mtxt2.FontWeight='bold';
+        mtxt2.HorizontalAlignment='center';
+        mtxt2.FontName='Rockwell';
+        instructions = sprintf('Objective: Eat as many eggs as possible while\n your snake grows longer and longer.\nAvoid running into the walls or into yourself.\n Compete with friends to see\n who can achieve the highest score.\n\nInstructions: Use the arrow keys to \nchange the direction of the snake.\nPress the escape key to instantly end your game.');
+        mtxt3=text(GRAPH_WIDTH/2,GRAPH_HEIGHT/2,instructions);
+        mtxt3.Color='white';
+        mtxt3.FontSize=16;
+        mtxt3.FontWeight='bold';
+        mtxt3.HorizontalAlignment='center';
+        mtxt3.FontName='Rockwell';
+        startmsg = sprintf('PRESS ANY KEY TO BEGIN');
+        mtxt4=text(GRAPH_WIDTH/2,GRAPH_HEIGHT/2-15,startmsg);
+        mtxt4.Color='[1 1 0]';
+        mtxt4.FontSize=20;
+        mtxt4.FontWeight='bold';
+        mtxt4.HorizontalAlignment='center';
+        mtxt4.FontName='Terminal';
+        %pause the game until a key is entered.
+        paused=1;
+        while paused
+            pause(0.1);
+            %while paused, make the enter button flash random colors
+            mtxt4.Color=randomColor();
+        end
+        %after entering a key, clear out the text and begin the game.
+        mtxt1.String='';
+        mtxt2.String='';
+        mtxt3.String='';
+        mtxt4.String='';
+    end
+    
+    %this function uses text to countdown on the screen.
+    function countDown()
+        txt=text(GRAPH_WIDTH/2,GRAPH_HEIGHT/2+10,'3');
+        txt.Color = 'red';
+        txt.FontSize = 64;
+        txt.FontName = 'IMPACT';
+        txt.HorizontalAlignment = 'center';
+        pause(1);
+        set(txt,'String','2');
+        txt.Color = 'yellow';
+        pause(1);
+        set(txt,'String','1');
+        txt.Color = 'g';
+        pause(1);
+        txt.Color = 'w';
+        set(txt,'String','GO!');
+        pause(0.5);
+        set(txt,'String','');
     end
 
 
 %------MAIN---------
 %while currently running the game itself
+
+
+
 while currently
     
 %while mid game
-pause(5);
+countDown();
 while running
     
     moveSnake();
@@ -420,13 +507,15 @@ while running
         %[y,Fs]=audioread('0477.wav');
         %sound(y,Fs);
         running=0;
-        break;
     end
     collisionEgg();
     pause(speed);
 end
-closeMenu();
 
+closeMenu();
+reset();
 end
+
 close all;
 end
+
