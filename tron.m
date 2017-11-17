@@ -101,6 +101,9 @@ player2_body=zeros(2,10000);
 player1_body=[GRAPH_WIDTH/4 GRAPH_HEIGHT/2;GRAPH_WIDTH/4-bike_speed GRAPH_HEIGHT/2];
 player2_body=[GRAPH_WIDTH*3/4 GRAPH_HEIGHT/2;GRAPH_WIDTH*3/4+bike_speed GRAPH_HEIGHT/2];
 
+%displays the main menu!
+mainMenu();
+
 %initial plot of the player body, represented by player_plot. b and r
 %squares with size of 12.
 player1_plot=plot(player1_body(:,1),player1_body(:,2),'bs','MarkerSize',12);
@@ -388,6 +391,53 @@ set(player2_plot,'MarkerFaceColor','r');
         txt.Color = 'green';
         pause(0.5);
         set(txt,'String','');
+    end
+
+%this function displays the MAIN MENUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU
+    function mainMenu
+        %mtxt1,2,3,4 all are various text strings to be displayed.
+        mainlogo='Tron';
+        %place the text on the figure
+        mtxt1=text(GRAPH_WIDTH/2,GRAPH_HEIGHT/2+40,mainlogo);
+        %more properties of each text
+        mtxt1.Color='w';
+        mtxt1.FontSize=72;
+        mtxt1.HorizontalAlignment='center';
+        mtxt1.FontName='Rockwell';
+        %this continues for the rest.
+        credits = 'Created by Steven Neveadomi, Bryce Pember, Lillian Ostrander, and Tori Aber';
+        mtxt2=text(GRAPH_WIDTH/2,GRAPH_HEIGHT/2+30,credits);
+        mtxt2.Color='w';
+        mtxt2.FontSize=10;
+        mtxt2.FontWeight='bold';
+        mtxt2.HorizontalAlignment='center';
+        mtxt2.FontName='Rockwell';
+        instructions = sprintf('Objective: Trap the other player with your own line or\n cause them to crash into the boundary walls\nwhile avoiding being trapped or crashing yourself.\n Compete with a friend to see who is the first to win three games! \n\n\n\nInstructions: The player on the left (Player 1) will use the keys WASD to control \ntheir direction while the player on the right (Player 2) will use the arrow keys.');
+        mtxt3=text(GRAPH_WIDTH/2,GRAPH_HEIGHT/2+10,instructions);
+        mtxt3.Color='w';
+        mtxt3.FontSize=20;
+        mtxt3.FontWeight='bold';
+        mtxt3.HorizontalAlignment='center';
+        mtxt3.FontName='Rockwell';
+        startmsg = sprintf('PRESS ANY KEY TO BEGIN');
+        mtxt4=text(GRAPH_WIDTH/2,GRAPH_HEIGHT/2-30,startmsg);
+        mtxt4.Color='[1 1 0]';
+        mtxt4.FontSize=20;
+        mtxt4.FontWeight='bold';
+        mtxt4.HorizontalAlignment='center';
+        mtxt4.FontName='Terminal';
+        %pause the game until a key is entered.
+        paused=1;
+        while paused
+            pause(0.1);
+            %while paused, make the enter button flash random colors
+            mtxt4.Color=randomColor();
+        end
+        %after entering a key, clear out the text and begin the game.
+        mtxt1.String='';
+        mtxt2.String='';
+        mtxt3.String='';
+        mtxt4.String='';
     end
 
     %this function displays the winner of the game and then prompts the
