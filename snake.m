@@ -20,6 +20,10 @@ clc;
 %read initial highscores
 [scores names] = xlsread('highscores.xlsx');
 
+
+%load audio files
+[y,Fs]=audioread('carrotnom.wav');
+
 %if the game is paused
 paused=0;
 
@@ -274,6 +278,8 @@ setScore()
     function collisionEgg()
         difference=egg_position-snake_body(1,:);
         if (difference(1)<1.4&&difference(1)>-1.4)&&(difference(2)<1.4&&difference(2)>-1.4)
+            
+            sound(y,Fs);
             growSnake(40);
             PLAYER_SCORE=PLAYER_SCORE+10;
             setEgg();
@@ -506,8 +512,6 @@ while running
     moveSnake();
     drawSnake;
     if (collision())
-        %[y,Fs]=audioread('0477.wav');
-        %sound(y,Fs);
         running=0;
     end
     collisionEgg();
