@@ -6,6 +6,10 @@
 %+ With help from: Bryce Pember, +
 %+ Tori Aber, and Lily Ostrander +
 %+===============================+
+%VERSION 1.0
+%KNOWN ISSUES:
+%High score board will not work on Apple computers. This is a MATLAB error
+%and not an error due to coding.
 
 %-------MAIN SCRIPT--------
 %Any code within this function is automatically executed on start up as
